@@ -57,6 +57,24 @@ Saved/*
 
 # Compiled source files for the engine to use
 Intermediate/*
+*/Intermediate
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+######################
+# UE Generated files #
+######################
+*/Build
+*/Binaries
+*/DerivedDataCache
+*/Intermediate
+*/Saved
+BattleTank/Content/StarterContent/
+
+######################
+# VS Generated files #
+######################
+*.VC.db
+*.VC.VC.opendb
+
