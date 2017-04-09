@@ -79,3 +79,4 @@ BattleTank/Content/StarterContent/
 *.VC.VC.opendb
 
 BattleTank/Content/BattleGround.umap
+*.umap
