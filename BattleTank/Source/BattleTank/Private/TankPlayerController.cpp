@@ -32,8 +32,6 @@ void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AimTowardsCrosshair();
-//	UE_LOG(LogTemp, Warning, TEXT("Player controller ticking !!!"));
-
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& hitLocation) const
@@ -43,7 +41,6 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& hitLocation) const
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 
 	auto screenLocation = FVector2D (ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
-//	UE_LOG(LogTemp, Warning, TEXT("Crosshair Screen Location: %s"), *screenLocation.ToString());
 
 	// "De-project" the screen position of the crosshair to world direction
 	FVector lookDirection;
@@ -52,7 +49,6 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& hitLocation) const
 		// Line-trace along that look direction and see what we hit (up to max range)
 		if (GetLookVectorHitLocation(lookDirection, hitLocation))
 		{
-//			UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *hitLocation.ToString());
 			return true;
 		}
 	}

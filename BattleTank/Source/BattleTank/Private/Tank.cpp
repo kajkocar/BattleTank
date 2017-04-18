@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
+#include "Projectile.h"
 #include "TankBarrel.h"
+#include "TankTrack.h"
 #include "Tank.h"
 
 
@@ -23,8 +25,15 @@ void ATank::BeginPlay()
 
 void ATank::SetBarrelReference(UTankBarrel* barrelToSet)
 {
+	Barrel = barrelToSet;
 	tankAimingComponent->SetBarrelReference(barrelToSet);
 }
+
+void ATank::SetTurretReference(UTankTurret* turretToSet)
+{
+	tankAimingComponent->SetTurretReference(turretToSet);
+}
+
 
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -36,4 +45,31 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ATank::AimAt(FVector hitLocation)
 {
 	tankAimingComponent->AimAt(hitLocation, LaunchSpeed);
+}
+
+void ATank::Fire()
+{
+	bool isReloaded = (FPlatformTime::Seconds() - lastFireTime) > reloadTimeInSeconds;
+	if (Barrel && isReloaded)
+	{
+		// spawn projectile on the socket location on the barrel
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+
+		Projectile->LaunchProjectile(LaunchSpeed);
+		lastFireTime = FPlatformTime::Seconds();
+	}
+}
+
+void ATank::SetLeftTrack(UTankTrack * trackToSet)
+{
+	trackLeft = trackToSet;
+}
+
+void ATank::SetRightTrack(UTankTrack * trackToSet)
+{
+	trackRight = trackToSet;
 }

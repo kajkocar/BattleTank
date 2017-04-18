@@ -20,11 +20,9 @@ public:
 
 
 private:
-	ATank* GetControlledTank() const;
-
 	virtual void BeginPlay() override;
 	
+	ATank* GetControlledTank() const;
 	ATank* GetPlayerTank() const;
-	void AimTowardsPlayer();
 
 };

@@ -7,6 +7,9 @@
 #include "Tank.generated.h"
 
 class UTankBarrel;
+class UTankTurret;
+class AProjectile;
+class UTankTrack;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -20,7 +23,15 @@ public:
 	void AimAt(FVector hitLocation);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UTankBarrel* barrelToSet);
+		void SetBarrelReference(UTankBarrel* barrelToSet);
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void SetTurretReference(UTankTurret* turretToSet);
+	UFUNCTION(BlueprintCallable, Category = Firing)
+		void Fire();
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void SetLeftTrack(UTankTrack* trackToSet);
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void SetRightTrack(UTankTrack* trackToSet);
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,8 +40,21 @@ protected:
 	UTankAimingComponent* tankAimingComponent = nullptr;
 
 private:
+	UPROPERTY(EditAnywhere, Category = Setup)
+		TSubclassOf<AProjectile> ProjectileBlueprint;
+
 	UPROPERTY(EditAnywhere, Category = Firing)
-		float LaunchSpeed = 100000.0f;	// 1000 meters per second
+		float LaunchSpeed = 4000.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		float reloadTimeInSeconds = 3;
+
+	UTankBarrel* Barrel = nullptr;
+
+	double lastFireTime = 0;
+
+	UTankTrack* trackLeft;
+	UTankTrack* trackRight;
 
 public:	
 	// Called to bind functionality to input

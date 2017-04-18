@@ -2,6 +2,7 @@
 
 #include "BattleTank.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "TankAimingComponent.h"
 
 
@@ -20,6 +21,11 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* barrelToSet)
 	Barrel = barrelToSet;
 }
 
+void UTankAimingComponent::SetTurretReference(UTankTurret* turretToSet)
+{
+	Turret = turretToSet;
+}
+
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
 	// work out difference between current barrel rotation and aim direction
@@ -28,6 +34,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto deltaRotator = aimAsRotator - barrelRotator;
 
 	Barrel->Elevate(deltaRotator.Pitch);
+	Turret->Rotate(deltaRotator.Yaw);
 }
 
 void UTankAimingComponent::AimAt(FVector worldSpaceLoc, float LaunchSpeed)
@@ -35,7 +42,8 @@ void UTankAimingComponent::AimAt(FVector worldSpaceLoc, float LaunchSpeed)
 	if (!Barrel)
 		return;
 
-//	UE_LOG(LogTemp, Warning, TEXT("UTankAimingComponent::AimAt %s"), *worldSpaceLoc.ToString());
+	if (!Turret)
+		return;
 
 	FVector OutLaunchVelocity;
 	FVector startLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -57,19 +65,6 @@ void UTankAimingComponent::AimAt(FVector worldSpaceLoc, float LaunchSpeed)
 	{
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
-// 		auto Time = GetWorld()->GetTimeSeconds();
-// 		UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution find"), Time);
 	}
-	else
-	{
-// 		auto Time = GetWorld()->GetTimeSeconds();
-// 		UE_LOG(LogTemp, Warning, TEXT("%f: No Aim solve find"), Time);
-	}
-
-
-	/*
-	auto barrelLocation = Barrel->GetComponentLocation();
-	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s"), *ourTankName, *worldSpaceLoc.ToString(), *barrelLocation.ToString());
-*/
 
 }
