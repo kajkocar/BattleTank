@@ -3,6 +3,7 @@
 #pragma once
 
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
@@ -10,6 +11,7 @@ class UTankBarrel;
 class UTankTurret;
 class AProjectile;
 class UTankTrack;
+class UTankMovementComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -37,7 +39,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UTankAimingComponent* tankAimingComponent = nullptr;
+	UPROPERTY(BlueprintReadOnly, Category = Setup)
+		UTankAimingComponent* tankAimingComponent = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, Category = Setup)
+		UTankMovementComponent* tankMovementComponent = nullptr;
 
 private:
 	UPROPERTY(EditAnywhere, Category = Setup)

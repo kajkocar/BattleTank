@@ -18,6 +18,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+
+	// How close can the AI tank get to player
+	UPROPERTY(BlueprintReadOnly, Category = Setup)
+		float AcceptaceRadius = 300.0f;		// 3000
 
 private:
 	virtual void BeginPlay() override;

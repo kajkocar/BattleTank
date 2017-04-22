@@ -14,13 +14,13 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 	tankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+// 	tankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
 }
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
 }
 
 void ATank::SetBarrelReference(UTankBarrel* barrelToSet)
