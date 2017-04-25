@@ -40,8 +40,8 @@ void UTankMovementComponent::IntendTurnLeft(float Throw)
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
-	auto tankName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s: RequestDirectMove: %s %c"), *tankName, *MoveVelocity.ToString(), (bForceMaxSpeed ? 'Y' : 'N') );
+// 	auto tankName = GetOwner()->GetName();
+// 	UE_LOG(LogTemp, Warning, TEXT("%s: RequestDirectMove: %s %c"), *tankName, *MoveVelocity.ToString(), (bForceMaxSpeed ? 'Y' : 'N') );
 
 	// we only need directions, we will move the tank
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();

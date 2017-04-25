@@ -14,7 +14,7 @@ enum class EFiringStatus : uint8
 	Locked
 };
 
-
+class AProjectile;
 class UTankBarrel;
 class UTankTurret;
 
@@ -27,19 +27,41 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	void AimAt(FVector worldSpaceLoc, float LaunchSpeed);
-	void SetBarrelReference(UTankBarrel* barrelToSet);
-	void SetTurretReference(UTankTurret* turretToSet);
+	void AimAt(FVector worldSpaceLoc);
+	EFiringStatus GetFiringState() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+		void Fire();
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+		void Initialize(UTankBarrel* barrelToSet, UTankTurret* turretToSet);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-		EFiringStatus FiringState = EFiringStatus::Aiming;
+		EFiringStatus FiringState = EFiringStatus::Reloading;
+
+	UPROPERTY(EditAnywhere, Category = "Firing")
+		float LaunchSpeed = 4000.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		float reloadTimeInSeconds = 3;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+		TSubclassOf<AProjectile> ProjectileBlueprint;
 
 private:
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+	virtual void BeginPlay() override;
+	
+	FVector AimDirection;
+	bool isBarrelMoving();
+
+	void MoveBarrelTowards();
 
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
-	void MoveBarrelTowards(FVector AimDirection);
+
+	double lastFireTime = 0;
 
 
 };

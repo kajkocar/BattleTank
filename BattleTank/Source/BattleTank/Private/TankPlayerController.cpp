@@ -1,30 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
+#include "TankAimingComponent.h"
 #include "TankPlayerController.h"
 
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	auto aimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(aimingComponent)) { return; }
 
-	auto controlledTank = GetControlledTank();
-	if (!controlledTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Not Possesing tank !!!"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank %s"), *controlledTank->GetName());
-	}
-
-
-	UE_LOG(LogTemp, Warning, TEXT("ATankPlayerController Begin Play") );
-}
-
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
+	FoundAimingComponent(aimingComponent);
 }
 
 // Called every frame
@@ -47,12 +34,8 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& hitLocation) const
 	if (GetLookDirection(screenLocation, lookDirection))
 	{
 		// Line-trace along that look direction and see what we hit (up to max range)
-		if (GetLookVectorHitLocation(lookDirection, hitLocation))
-		{
-			return true;
-		}
+		return GetLookVectorHitLocation(lookDirection, hitLocation);
 	}
-
 
 	return false;
 }
@@ -88,13 +71,15 @@ bool ATankPlayerController::GetLookDirection(FVector2D screenLocation, FVector& 
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank())
-		return;
+	if (!GetPawn()) { return; }   // if not possesing
+
+	auto aimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(aimingComponent)) { return; }
 
 	FVector HitLocation;	// Out Parameter
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		GetControlledTank()->AimAt(HitLocation);
+		aimingComponent->AimAt(HitLocation);
 	}
 
 

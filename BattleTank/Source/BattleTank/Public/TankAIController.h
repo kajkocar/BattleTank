@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "Tank.h"
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
@@ -21,13 +20,10 @@ public:
 protected:
 
 	// How close can the AI tank get to player
-	UPROPERTY(BlueprintReadOnly, Category = Setup)
-		float AcceptaceRadius = 300.0f;		// 3000
+	UPROPERTY(EditAnywhere, Category = "Setup")
+		float AcceptaceRadius = 30000.0f;		// 3000
 
 private:
 	virtual void BeginPlay() override;
 	
-	ATank* GetControlledTank() const;
-	ATank* GetPlayerTank() const;
-
 };
